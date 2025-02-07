@@ -222,7 +222,7 @@ public class AutonCode2 extends OpMode {
                 forward(69, 0.04); //OG: 60
                 robot.shoulder.setTargetPosition(1785);//OG: 275, 220+1647=1867
                 robot.slide.setTargetPosition(350); //444
-                if (completed()) {
+                if (completed())  {
                     autonIndex++;
                     robot.mecanumDrive(0, 0, 0);
                     autonTimer = futureTime(1);
@@ -243,15 +243,24 @@ public class AutonCode2 extends OpMode {
 
             case 1:
                 if (isPast(autonTimer)) {
-                    robot.shoulder.setTargetPosition(1360);
+                    robot.shoulder.setTargetPosition(1200);
                     if (robot.shoulder.getCurrentPosition() <= robot.shoulder.getTargetPosition()) {
-                        autonIndex++;
-                        autonTimer = futureTime(1);
+                        autonIndex+=2;
+                        autonTimer = futureTime(2);
                     }
                 }
                 break;
 
-            case 2:
+           /* case 2:
+                if (isPast(autonTimer)){
+                    robot.shoulder.setTargetPosition(1200);
+                }
+                if(robot.shoulder.getCurrentPosition() <= robot.shoulder.getTargetPosition()){
+                    autonIndex++;
+                    autonTimer = futureTime(2);
+                }*/
+
+            case 3:
                 // Open claw
                 if (isPast(autonTimer)) {
                     robot.claw.setPosition(robot.clawOpenPosition);
@@ -259,9 +268,9 @@ public class AutonCode2 extends OpMode {
                 }
                 break;
 
-            case 3:
+            case 4:
                 //Back up
-                forward(65, -0.25); //OG: 60
+                forward(18, -0.25); //OG: 60
                 if (completed()) {
                     autonIndex++;
                     robot.mecanumDrive(0, 0, 0);
@@ -271,33 +280,71 @@ public class AutonCode2 extends OpMode {
 
            // Specimen two
 
-            case 4:
-                // Strafe sideways one tile
-                strafe(65, 0.04);
-                if(completed()){
+            case 5:
+                //turn 180
+                turn(140,2);
+                if(completed()) {
                     autonIndex++;
-                    robot.mecanumDrive(0, 0, 0);
-                    autonIndex = 0;
-                    return true;
+                    autonTimer = futureTime(1.75);
                 }
                 break;
 
-            /*case 8:
-                // Forward one tile
-                forward(65, 0.04);
+            case 6:
+                //Strafe sideways one tile
+                if(isPast(autonTimer)) {
+                    strafe(35, -1);
+                    if (completed()) {
+                        autonIndex+=2;
+                        //    autonIndex = 0;
+                        //    return true;
+                    }
+                }
+                break;
+
+            case 7:
+                //go forward to specimen
+                forward(1, 0.25);
+                if(completed()){
+                    autonIndex++;
+                    robot.mecanumDrive(0, 0, 0);
+                }
+
+
+
+           case 8:
+               //shoulder go down
+               robot.shoulder.setTargetPosition(1000);
+               if(completed()){
+                   autonIndex++;
+                   autonTimer = futureTime(1);
+               }
                 break;
 
             case 9:
-                // Strafe sideways one tile
-                strafe(65, 0.04);
+                // close claw
+                if(isPast(autonTimer)){
+                    robot.claw.setPosition(robot.clawClosePosition);
+                    autonIndex++;
+                }
                 break;
 
             case 10:
-                // Turn 180
-                turn(180, 1);
+                //lift up with specimen
+                robot.shoulder.setTargetPosition(1200);
+                autonIndex++;
                 break;
 
+
             case 11:
+                //turn 180
+                strafe(3, -1);
+                if(completed()){
+                    autonIndex++;
+                    //    autonIndex = 0;
+                    //    return true;
+                }
+                break;
+       /*     case 11:
                 // Move forward 3 tiles - push sample into conservation zone and go back out
                 // Adjust shoulder and slide position ideal for picking up specimen (a)
                 robot.shoulder.setTargetPosition(robot.shoulder.getCurrentPosition()-500);
@@ -369,10 +416,10 @@ public class AutonCode2 extends OpMode {
                 //Strafe left 2 tiles
                 strafe(130, -0.04);
                 robot.slide.setTargetPosition(24);
-                break;*/
+                break;
 
             default:
-                break;
+                break;*/
         }
         return false;
     }
